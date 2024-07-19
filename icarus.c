@@ -4,14 +4,22 @@
 
 int main(void)
 {
-  char *data = getenv("QUERY_STRING");
-  char action[100];
-  sscanf(data,"action=%s", action);
-  printf("Content-type: text\n\n");
-  if (strcmp(action, "enableguest") == 0) {
-	printf("1");
-  } else {
-	printf("0");
-  }
-  return 0;
+    char *data = getenv("QUERY_STRING");
+    char action[100];
+    int error = 0;
+    int success = 0;
+    sscanf(data,"action=%s", action);
+    printf("Content-type: text\n\n");
+    if (strcmp(action, "enableguest") == 0) {
+	error = system("guest_wifi enable");
+    } else if (strcmp(action, "disableguest") == 0) {
+	error = system("guest_wifi disable");
+    } else {
+	error = 1;
+    }
+
+    if (error == 0) {
+	success = 1;
+    }
+    printf("%d", success);
 }
